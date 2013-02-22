@@ -3,11 +3,108 @@
 </head>
 
 <body>
-  {{> hello}}
+  <div class="container">
+    {{>add_players}}
+    <div class="row">
+      <div class="span9">
+        {{>game_list}}
+      </div>
+      <div class="span3">
+        {{>player_list}}
+      </div>
+    </div>
+  </div>
+  {{>game_main}}
 </body>
 
 <template name="hello">
   <h1>Hello World!</h1>
   {{greeting}}
   <input type="button" value="Click" />
+</template>
+
+<template name="create_new_game">
+  <input type='button' value='New Game'>
+</template>
+
+<template name="player_list">
+  <h2>Player List</h2>
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>Player Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each players}}
+        {{>player_list_row}}
+      {{/each}}
+    </tbody>
+  </table>
+</template>
+
+<template name="player_list_row">
+  <tr>
+    <td> {{name}} </td>
+  </tr>
+</template>
+
+<template name="game_list">
+  <h2>Game List</h2>
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>Game Name</th>
+        <th>Player One</th>
+        <th>Player Two</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each games}}
+        {{>game_list_row}}
+      {{/each}}
+    </tbody>
+  </table>
+</template>
+
+<template name="game_list_row">
+  <tr>
+    <td> {{name}} </td>
+    <td> {{player_one}} </td>
+    <td> {{player_two}} </td>
+    <td> 
+      {{#if is_logged_in}}
+        <a href="javascript:void(0)" class="btn join_btn">join this game</a> 
+      {{/if}}
+    </td>
+  </tr>
+</template>
+
+<template name="add_players">
+  {{#if is_logged_in }}
+    <form class="form-inline">
+      <input type="text" id="your_name" placeholder="Your Name..."> 
+      <input type="button" id="login" value="Join Games"> 
+    </form>
+  {{else}}
+    <div class="login_info clearfix">
+      <h4 class="pull-left">Logged in as: {{player.name}}</h4>
+      <a href="javascript:void(0)" class="pull-right btn" id="logout_btn">Log out...</a>
+    </div>
+  {{/if}}
+</template>
+
+<template name="game_main">
+<!-- Modal -->
+<div id="game_main" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">{{game.name}}</h3>
+  </div>
+  <div class="modal-body">
+    <p>Player one: {{game.player_one}}</p>
+    <p>Player two: {{game.player_two}}</p>
+  </div>
+</div>
 </template>
